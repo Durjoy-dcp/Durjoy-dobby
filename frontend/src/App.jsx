@@ -1,16 +1,34 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
+import Home from "./Components/Home";
+import Login from "./Components/Login";
+import Singup from "./Components/Singup";
 import Main from "./Layout/Main";
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Main></Main>,
+      children: [
+        {
+          path: "/",
+          element: <Home></Home>,
+        },
+        {
+          path: "/login",
+          element: <Login></Login>,
+        },
+        {
+          path: "/signup",
+          element: <Singup></Singup>,
+        },
+      ],
+    },
+  ]);
   return (
     <>
-      <Main></Main>
-      <button className="btn">Button</button>
-      <button className="btn btn-primary">Button</button>
-      <button className="btn btn-secondary">Button</button>
-      <button className="btn btn-accent">Button</button>
-      <button className="btn btn-ghost">Button</button>
-      <button className="btn btn-link">Button</button>
+      <RouterProvider router={router} />
     </>
   );
 }
