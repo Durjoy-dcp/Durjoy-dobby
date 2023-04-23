@@ -1,11 +1,13 @@
 import React from "react";
 import { useContext } from "react";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 
 const Singup = () => {
   const { signup } = useContext(AuthContext);
   const [msg, setMsg] = useState(null);
+  const navigate = useNavigate();
   const handleToSignUp = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -20,7 +22,7 @@ const Singup = () => {
       setMsg("Provide minimum 8 characters to set password");
       return;
     }
-    signup(email, password).then((res) => console.log(res));
+    signup(email, password).then(() => navigate("/"));
     setMsg(null);
   };
   return (
@@ -70,6 +72,13 @@ const Singup = () => {
               <button className="btn btn-primary" type="submit">
                 Sign Up
               </button>
+              <p className="my-2">
+                {" "}
+                Already have an account?{" "}
+                <Link className="text-green-600" to="/login">
+                  Log in
+                </Link>
+              </p>
             </div>
           </div>
         </form>
