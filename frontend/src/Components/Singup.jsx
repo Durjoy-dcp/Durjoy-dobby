@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
-
+import authImg from "../assets/auth-animation.gif";
 const Singup = () => {
   const { signup } = useContext(AuthContext);
   const [msg, setMsg] = useState(null);
@@ -37,11 +37,12 @@ const Singup = () => {
   return (
     <div className="hero min-h-screen ">
       <div className="hero-content flex-col lg:flex-row-reverse">
+        <img src={authImg} className="max-w-sm " />
         <form
           className="card flex-shrink-0 w-full max-w-sm shadow-2xl "
           onSubmit={(e) => handleToSignUp(e)}
         >
-          <p className="text-center">Sing Up</p>
+          <p className="text-center my-3">Sing Up</p>
           <div className="card-body">
             <div className="form-control">
               <label className="label">

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
+import Spinner from "./Spinner";
+import uploadAnimation from "../assets/upload-files-animation.gif";
 
 const ImageUpload = () => {
   const { user, loading, seLoading } = useContext(AuthContext);
@@ -42,24 +44,41 @@ const ImageUpload = () => {
             .then((result) => {
               if (result.acknowledged) {
                 navigate("/gallery");
+                seLoading(false);
               }
             })
             .catch((err) => {
-              console.log(err);
+              seLoading(false);
             });
         }
       });
   };
+  if (loading) {
+    return <Spinner></Spinner>;
+  }
   return (
-    <div>
-      <form onSubmit={(e) => handleAddProduct(e)}>
-        <input type="text" name="name" placeholder="Name" />
-        <input type="file" name="image" />
+    <div className="hero min-h-screen ">
+      <div className="hero-content">
+        <div>
+          <img src={uploadAnimation} className="max-w-sm " />{" "}
+          <p className="py-6 text-2xl font-bold italic text-red-500">
+            Upload your images daily & create Story
+          </p>
+        </div>
+        <form onSubmit={(e) => handleAddProduct(e)} className="flex flex-col">
+          <input
+            type="text"
+            name="name"
+            placeholder="Image Title"
+            className="border my-2"
+          />
+          <input type="file" name="image" className="my-2" />
 
-        <button className="btn btn-xs btn-info" type="submit">
-          Upload
-        </button>
-      </form>
+          <button className="btn btn-xs btn-info" type="submit">
+            Upload
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { AuthContext } from "../Context/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import SingleImage from "./SingleImage";
 import { useEffect } from "react";
+import Spinner from "./Spinner";
 
 const Gallery = () => {
   const [serachText, setSerachText] = useState("");
@@ -35,6 +36,9 @@ const Gallery = () => {
   useEffect(() => {
     refetch();
   }, [serachText]);
+  if (isLoading) {
+    return <Spinner></Spinner>;
+  }
   return (
     <div>
       <form action="" onSubmit={(e) => handleToSerarch(e)}>

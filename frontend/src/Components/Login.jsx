@@ -1,12 +1,14 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
-
+import Spinner from "./Spinner";
+import authImg from "../assets/auth-animation.gif";
 const Login = () => {
-  const { login } = useContext(AuthContext);
+  const { login, loading, seLoading } = useContext(AuthContext);
   const [msg, setMsg] = useState(null);
   const navigate = useNavigate();
   const handleToLogin = (e) => {
+    seLoading(true);
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
@@ -19,21 +21,30 @@ const Login = () => {
           .then((data) => {
             if (data?.accessToken) {
               localStorage.setItem("dobby-token", data.accessToken);
+
               navigate("/");
+              seLoading(false);
             }
           });
       })
-      .catch((err) => setMsg(err.message));
+      .catch((err) => {
+        setMsg(err.message);
+        seLoading(false);
+      });
     setMsg(null);
   };
+  if (loading) {
+    return <Spinner></Spinner>;
+  }
   return (
     <div className="hero min-h-screen ">
       <div className="hero-content flex-col lg:flex-row-reverse">
+        <img src={authImg} className="max-w-sm " />
         <form
           className="card flex-shrink-0 w-full max-w-sm shadow-2xl "
           onSubmit={(e) => handleToLogin(e)}
         >
-          <p className="text-center">Login</p>
+          <p className="text-center my-3">Login</p>
           <div className="card-body">
             <div className="form-control">
               <label className="label">
