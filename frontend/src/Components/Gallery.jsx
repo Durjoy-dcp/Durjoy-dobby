@@ -17,7 +17,12 @@ const Gallery = () => {
     queryKey: ["images"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/gallery?serachText=${serachText}&&email=${user?.email}`
+        `http://localhost:5000/gallery?serachText=${serachText}&&email=${user?.email}`,
+        {
+          headers: {
+            authorization: `bearer ${localStorage.getItem("dobby-token")}`,
+          },
+        }
       );
       const data = await res.json();
       return data;

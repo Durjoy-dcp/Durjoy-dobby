@@ -30,10 +30,11 @@ const ImageUpload = () => {
             email: user?.email,
           };
 
-          fetch("http://localhost:5000/uploadimage", {
+          fetch(`http://localhost:5000/uploadimage?email=${user.email}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              authorization: `bearer ${localStorage.getItem("dobby-token")}`,
             },
             body: JSON.stringify(imgInfo),
           })

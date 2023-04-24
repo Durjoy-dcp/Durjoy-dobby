@@ -6,6 +6,7 @@ import ImageUpload from "./Components/ImageUpload";
 import Login from "./Components/Login";
 import Singup from "./Components/Singup";
 import Main from "./Layout/Main";
+import Private from "./Private";
 
 function App() {
   const router = createBrowserRouter([
@@ -27,11 +28,19 @@ function App() {
         },
         {
           path: "/imageupload",
-          element: <ImageUpload></ImageUpload>,
+          element: (
+            <Private>
+              <ImageUpload></ImageUpload>
+            </Private>
+          ),
         },
         {
           path: "/gallery",
-          element: <Gallery></Gallery>,
+          element: (
+            <Private>
+              <Gallery></Gallery>
+            </Private>
+          ),
         },
       ],
     },

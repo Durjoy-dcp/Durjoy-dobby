@@ -7,7 +7,10 @@ const NavHeader = () => {
   const { user, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
   const handlerToLogOut = () => {
-    logOut().then(() => navigate("/"));
+    logOut().then(() => {
+      localStorage.removeItem("dobby-token");
+      navigate("/");
+    });
   };
   return (
     <div>

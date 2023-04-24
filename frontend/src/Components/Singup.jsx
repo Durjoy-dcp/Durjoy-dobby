@@ -22,7 +22,16 @@ const Singup = () => {
       setMsg("Provide minimum 8 characters to set password");
       return;
     }
-    signup(email, password).then(() => navigate("/"));
+    signup(email, password).then((res) => {
+      fetch(`http://localhost:5000/jwt?email=${res.user.email}`)
+        .then((result) => result.json())
+        .then((data) => {
+          if (data?.accessToken) {
+            localStorage.setItem("dobby-token", data.accessToken);
+            navigate("/");
+          }
+        });
+    });
     setMsg(null);
   };
   return (

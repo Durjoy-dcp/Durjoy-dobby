@@ -13,7 +13,16 @@ const Login = () => {
     const password = form.password.value;
 
     login(email, password)
-      .then(() => navigate("/"))
+      .then((res) => {
+        fetch(`http://localhost:5000/jwt?email=${res.user.email}`)
+          .then((result) => result.json())
+          .then((data) => {
+            if (data?.accessToken) {
+              localStorage.setItem("dobby-token", data.accessToken);
+              navigate("/");
+            }
+          });
+      })
       .catch((err) => setMsg(err.message));
     setMsg(null);
   };
