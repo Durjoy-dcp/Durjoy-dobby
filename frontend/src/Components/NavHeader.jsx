@@ -18,12 +18,17 @@ const NavHeader = () => {
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
             {user && user.uid ? (
-              <button
-                className="btn btn-xs btn-error"
-                onClick={handlerToLogOut}
-              >
-                Logout
-              </button>
+              <div className="flex gap-7">
+                <Link to="/imageupload">Upload Image</Link>
+                <Link to="/imageupload">Gallery</Link>
+
+                <button
+                  className="btn btn-xs btn-error"
+                  onClick={handlerToLogOut}
+                >
+                  Logout
+                </button>
+              </div>
             ) : (
               <div className="flex gap-4">
                 {" "}
