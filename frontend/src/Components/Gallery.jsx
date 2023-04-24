@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import SingleImage from "./SingleImage";
+import { useEffect } from "react";
 
 const Gallery = () => {
   const [serachText, setSerachText] = useState("");
@@ -22,8 +23,22 @@ const Gallery = () => {
       return data;
     },
   });
+  const handleToSerarch = (e) => {
+    e.preventDefault();
+    setSerachText(e.target.searchName.value);
+  };
+  useEffect(() => {
+    refetch();
+  }, [serachText]);
   return (
     <div>
+      <form action="" onSubmit={(e) => handleToSerarch(e)}>
+        <input type="text" name="searchName" placeholder="Search by Name " />
+        <button className="btn btn-xs btn-info" type="submit">
+          Search
+        </button>
+      </form>
+
       {images.map((img) => (
         <SingleImage key={img._id} img={img}></SingleImage>
       ))}
