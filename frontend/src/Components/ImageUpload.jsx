@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 
 const ImageUpload = () => {
-  const { user } = useContext(AuthContext);
-  const [upload, setUpload] = useState(false);
+  const { user, loading, seLoading } = useContext(AuthContext);
   const imageHostKey = import.meta.env.VITE_APP_imgbb;
+  const navigate = useNavigate();
   const handleAddProduct = (e) => {
     e.preventDefault();
     const img = e.target.image.files[0];
     const name = e.target.name.value;
     const formData = new FormData();
-    formData.append("image", img);
 
+    formData.append("image", img);
+    seLoading(true);
     const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
     fetch(url, {
       method: "POST",
@@ -36,7 +38,14 @@ const ImageUpload = () => {
             body: JSON.stringify(imgInfo),
           })
             .then((res) => res.json())
-            .then((result) => console.log(result));
+            .then((result) => {
+              if (result.acknowledged) {
+                navigate("/gallery");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       });
   };
@@ -44,12 +53,11 @@ const ImageUpload = () => {
     <div>
       <form onSubmit={(e) => handleAddProduct(e)}>
         <input type="text" name="name" placeholder="Name" />
-        <input
-          type="file"
-          accept="image/x-png,image/gif,image/jpeg"
-          name="image"
-        />
-        <button className="btn btn-xs btn-info">Upload</button>
+        <input type="file" name="image" />
+
+        <button className="btn btn-xs btn-info" type="submit">
+          Upload
+        </button>
       </form>
     </div>
   );

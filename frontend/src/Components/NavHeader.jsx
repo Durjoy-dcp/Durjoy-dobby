@@ -20,7 +20,7 @@ const NavHeader = () => {
             {user && user.uid ? (
               <div className="flex gap-7">
                 <Link to="/imageupload">Upload Image</Link>
-                <Link to="/imageupload">Gallery</Link>
+                <Link to="/gallery">Gallery</Link>
 
                 <button
                   className="btn btn-xs btn-error"

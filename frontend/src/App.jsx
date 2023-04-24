@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
+import Gallery from "./Components/Gallery";
 import Home from "./Components/Home";
 import ImageUpload from "./Components/ImageUpload";
 import Login from "./Components/Login";
@@ -27,6 +28,10 @@ function App() {
         {
           path: "/imageupload",
           element: <ImageUpload></ImageUpload>,
+        },
+        {
+          path: "/gallery",
+          element: <Gallery></Gallery>,
         },
       ],
     },
