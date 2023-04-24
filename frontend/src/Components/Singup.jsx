@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import authImg from "../assets/auth-animation.gif";
+import Spinner from "./Spinner";
 const Singup = () => {
-  const { signup, setuser, setLoading } = useContext(AuthContext);
+  const { signup, setuser, setLoading, loading, authToken, setAuthToken } =
+    useContext(AuthContext);
   const [msg, setMsg] = useState(null);
   const navigate = useNavigate();
   const handleToSignUp = (e) => {
@@ -27,6 +29,7 @@ const Singup = () => {
         console.log(res);
         if (res.status === 403) {
           res.json().then((data) => {
+            setLoading(false);
             setMsg(data.message);
           });
           return;
@@ -40,17 +43,22 @@ const Singup = () => {
             .then((result) => result.json())
             .then((data2) => {
               if (data2?.accessToken) {
-                setuser(data);
+                // setuser(data);
                 localStorage.setItem("dobby-token", data2.accessToken);
                 setLoading(false);
+                setAuthToken(data2.accessToken);
                 navigate("/");
               }
+              setLoading(false);
             });
         }
       });
 
     setMsg(null);
   };
+  if (loading) {
+    return <Spinner></Spinner>;
+  }
   return (
     <div className="hero min-h-screen ">
       <div className="hero-content flex-col lg:flex-row-reverse">

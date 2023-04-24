@@ -4,7 +4,8 @@ import { AuthContext } from "../Context/AuthProvider";
 import Spinner from "./Spinner";
 import authImg from "../assets/auth-animation.gif";
 const Login = () => {
-  const { login, loading, setLoading, setuser } = useContext(AuthContext);
+  const { login, loading, setLoading, setuser, authToken, setAuthToken } =
+    useContext(AuthContext);
   const [msg, setMsg] = useState(null);
   const navigate = useNavigate();
   const handleToLogin = (e) => {
@@ -19,8 +20,10 @@ const Login = () => {
         console.log(res);
         if (res.status === 403) {
           res.json().then((data) => {
+            setLoading(false);
             setMsg(data.message);
           });
+
           return;
         }
         return res.json();
@@ -32,17 +35,21 @@ const Login = () => {
             .then((result) => result.json())
             .then((data2) => {
               if (data2?.accessToken) {
-                setuser(data);
+                // setuser(data);
                 localStorage.setItem("dobby-token", data2.accessToken);
+                setAuthToken(data2.accessToken);
                 setLoading(false);
                 navigate("/");
               }
             });
         }
+        setLoading(false);
       });
     setMsg(null);
   };
-
+  if (loading) {
+    return <Spinner></Spinner>;
+  }
   return (
     <div className="hero min-h-screen ">
       <div className="hero-content flex-col lg:flex-row-reverse">

@@ -4,13 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 
 const NavHeader = () => {
-  const { user, logOut } = useContext(AuthContext);
+  const { user, setuser } = useContext(AuthContext);
   const navigate = useNavigate();
   const handlerToLogOut = () => {
-    logOut().then(() => {
-      localStorage.removeItem("dobby-token");
-      navigate("/");
-    });
+    setuser("");
+    localStorage.removeItem("dobby-token");
+    navigate("/");
   };
   const storeToken = localStorage.getItem("dobby-token") || null;
   return (
@@ -23,7 +22,7 @@ const NavHeader = () => {
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
-            {storeToken !== null ? (
+            {user ? (
               <div className="flex gap-7">
                 <Link to="/imageupload">Upload Image</Link>
                 <Link to="/gallery">Gallery</Link>

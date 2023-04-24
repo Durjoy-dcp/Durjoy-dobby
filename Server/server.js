@@ -91,6 +91,10 @@ async function run() {
       }
       res.send(user);
     });
+    app.get("/validate", verifyJWT, async (req, res) => {
+      // req.user contains the user object associated with the JWT
+      res.send({ email: req.decoded.email });
+    });
     app.post("/createuser", async (req, res) => {
       const info = req.body;
       const user = await userCollection.findOne({ email: info.email });

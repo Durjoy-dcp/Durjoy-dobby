@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { createContext } from "react";
-import app from "../Firebase/firebase-init";
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
 
 export const AuthContext = createContext();
-const auth = getAuth(app);
+
 const AuthProvider = ({ children }) => {
   const [user, setuser] = useState("");
   const [loading, setLoading] = useState(true);
+  const [authToken, setAuthToken] = useState(null);
   const signup = (email, password) => {
     setLoading(true);
     const info = { email, password };
@@ -36,23 +29,48 @@ const AuthProvider = ({ children }) => {
       },
     });
   };
-  const logOut = () => {
-    return signOut(auth);
-  };
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-  //     setuser(currentUser);
-  //     setLoading(false);
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
+
+  useEffect(() => {
+    const unsubscribe = () => {
+      // check if a JWT is present in local storage
+      const authToken = localStorage.getItem("dobby-token");
+      if (authToken) {
+        // validate the JWT and set the user if it is valid
+        fetch("http://localhost:5000/validate", {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Invalid token");
+            }
+          })
+          .then((data) => {
+            setuser(data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+            setLoading(false);
+          });
+      } else {
+        setLoading(false);
+      }
+    };
+    return () => unsubscribe();
+  }, [authToken]);
+
   const authInfo = {
     user,
     loading,
     setLoading,
     signup,
     login,
-    logOut,
+    authToken,
+    setAuthToken,
     setuser,
   };
   return (

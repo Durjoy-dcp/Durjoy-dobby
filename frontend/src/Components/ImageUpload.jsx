@@ -9,7 +9,7 @@ const ImageUpload = () => {
   const { user, loading, setLoading } = useContext(AuthContext);
   const imageHostKey = import.meta.env.VITE_APP_imgbb;
   const navigate = useNavigate();
-  setLoading(false);
+  // setLoading(false);
   const handleAddProduct = (e) => {
     e.preventDefault();
     const img = e.target.image.files[0];
@@ -43,8 +43,8 @@ const ImageUpload = () => {
             .then((res) => res.json())
             .then((result) => {
               if (result.acknowledged) {
-                navigate("/gallery");
                 setLoading(false);
+                navigate("/gallery");
               }
             })
             .catch((err) => {
