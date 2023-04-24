@@ -41,16 +41,28 @@ const Gallery = () => {
   }
   return (
     <div>
-      <form action="" onSubmit={(e) => handleToSerarch(e)}>
-        <input type="text" name="searchName" placeholder="Search by Name " />
+      <form
+        action=""
+        onSubmit={(e) => handleToSerarch(e)}
+        className="container mx-auto my-2"
+      >
+        <input
+          type="text"
+          name="searchName"
+          placeholder="Search by Name "
+          className="border p-2 w-1/4 m-2"
+        />
         <button className="btn btn-xs btn-info" type="submit">
           Search
         </button>
       </form>
-
-      {images.map((img) => (
-        <SingleImage key={img._id} img={img}></SingleImage>
-      ))}
+      <div className="container mx-auto p-2">
+        <div className="flex flex-wrap gap-20">
+          {images.map((img) => (
+            <SingleImage key={img._id} img={img}></SingleImage>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
