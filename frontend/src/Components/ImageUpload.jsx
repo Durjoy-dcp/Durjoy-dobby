@@ -6,9 +6,10 @@ import Spinner from "./Spinner";
 import uploadAnimation from "../assets/upload-files-animation.gif";
 
 const ImageUpload = () => {
-  const { user, loading, seLoading } = useContext(AuthContext);
+  const { user, loading, setLoading } = useContext(AuthContext);
   const imageHostKey = import.meta.env.VITE_APP_imgbb;
   const navigate = useNavigate();
+  setLoading(false);
   const handleAddProduct = (e) => {
     e.preventDefault();
     const img = e.target.image.files[0];
@@ -16,7 +17,7 @@ const ImageUpload = () => {
     const formData = new FormData();
 
     formData.append("image", img);
-    seLoading(true);
+    setLoading(true);
     const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
     fetch(url, {
       method: "POST",
@@ -29,10 +30,9 @@ const ImageUpload = () => {
           const imgInfo = {
             name,
             img: imageData.data.url,
-            email: user?.email,
           };
 
-          fetch(`http://localhost:5000/uploadimage?email=${user.email}`, {
+          fetch(`http://localhost:5000/uploadimage`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -44,11 +44,11 @@ const ImageUpload = () => {
             .then((result) => {
               if (result.acknowledged) {
                 navigate("/gallery");
-                seLoading(false);
+                setLoading(false);
               }
             })
             .catch((err) => {
-              seLoading(false);
+              setLoading(false);
             });
         }
       });

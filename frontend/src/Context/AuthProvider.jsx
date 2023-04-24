@@ -13,26 +13,48 @@ export const AuthContext = createContext();
 const auth = getAuth(app);
 const AuthProvider = ({ children }) => {
   const [user, setuser] = useState("");
-  const [loading, seLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const signup = (email, password) => {
-    seLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password);
+    setLoading(true);
+    const info = { email, password };
+    return fetch("http://localhost:5000/createuser", {
+      method: "POST",
+      body: JSON.stringify(info),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
   const login = (email, password) => {
-    seLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
+    setLoading(true);
+    const info = { email, password };
+    return fetch("http://localhost:5000/login", {
+      method: "POST",
+      body: JSON.stringify(info),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
   const logOut = () => {
     return signOut(auth);
   };
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setuser(currentUser);
-      seLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-  const authInfo = { user, loading, seLoading, signup, login, logOut };
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+  //     setuser(currentUser);
+  //     setLoading(false);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
+  const authInfo = {
+    user,
+    loading,
+    setLoading,
+    signup,
+    login,
+    logOut,
+    setuser,
+  };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );

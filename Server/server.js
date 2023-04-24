@@ -7,6 +7,7 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 var jwt = require("jsonwebtoken");
+var bcrypt = require("bcryptjs");
 const port = process.env.PORT || 5000;
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yx3tx8n.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -43,11 +44,9 @@ async function run() {
   try {
     const database = client.db("img-dobby");
     const imgCollection = database.collection("img-collection");
+    const userCollection = database.collection("user-collection");
     app.get("/gallery", verifyJWT, async (req, res) => {
-      const email = req.query.email;
-      if (email !== req.decoded.email) {
-        res.status(403).send({ message: "forbidden access" });
-      }
+      const email = req.decoded.email;
       const serachText = req.query.serachText;
       const regex = new RegExp(serachText, "i");
       const imgs = await imgCollection
@@ -65,7 +64,6 @@ async function run() {
     });
     app.get("/jwt", async (req, res) => {
       const email = req.query.email;
-      // console.log(email);
       const query = { email: email };
 
       const token = jwt.sign({ email }, process.env.JWT_SECRET);
@@ -74,14 +72,38 @@ async function run() {
       res.status(403).send({ accessToken: "" });
     });
     app.post("/uploadimage", verifyJWT, async (req, res) => {
-      const email = req.query.email;
-      if (email !== req.decoded.email) {
-        res.status(403).send({ message: "forbidden access" });
-      }
       const img = req.body;
+      img.email = req.decoded.email;
       img.appliedTime = new Date(Date.now()).toISOString();
       const result = await imgCollection.insertOne(img);
       res.send(result);
+    });
+    app.post("/login", async (req, res) => {
+      const info = req.body;
+      console.log(info);
+      const user = await userCollection.findOne({ email: info.email });
+      if (!user) {
+        return res.status(403).send({ message: "Email not exist" });
+      }
+      const result = await bcrypt.compare(info.password, user.password);
+      if (!result) {
+        return res.status(403).send({ message: "Password incorrect" });
+      }
+      res.send(user);
+    });
+    app.post("/createuser", async (req, res) => {
+      const info = req.body;
+      const user = await userCollection.findOne({ email: info.email });
+      if (user) {
+        return res.status(403).send({ message: "Provide an unique email" });
+      }
+      const user2 = { email: info.email };
+
+      const salt = await bcrypt.genSaltSync(10);
+      const encryptedpassword = await bcrypt.hashSync(info.password, salt);
+      info.password = encryptedpassword;
+      const result = await userCollection.insertOne(info);
+      res.send(user2);
     });
   } finally {
   }

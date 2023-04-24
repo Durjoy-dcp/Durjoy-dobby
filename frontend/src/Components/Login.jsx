@@ -4,11 +4,11 @@ import { AuthContext } from "../Context/AuthProvider";
 import Spinner from "./Spinner";
 import authImg from "../assets/auth-animation.gif";
 const Login = () => {
-  const { login, loading, seLoading } = useContext(AuthContext);
+  const { login, loading, setLoading, setuser } = useContext(AuthContext);
   const [msg, setMsg] = useState(null);
   const navigate = useNavigate();
   const handleToLogin = (e) => {
-    seLoading(true);
+    setLoading(true);
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
@@ -16,26 +16,33 @@ const Login = () => {
 
     login(email, password)
       .then((res) => {
-        fetch(`http://localhost:5000/jwt?email=${res.user.email}`)
-          .then((result) => result.json())
-          .then((data) => {
-            if (data?.accessToken) {
-              localStorage.setItem("dobby-token", data.accessToken);
-
-              navigate("/");
-              seLoading(false);
-            }
+        console.log(res);
+        if (res.status === 403) {
+          res.json().then((data) => {
+            setMsg(data.message);
           });
+          return;
+        }
+        return res.json();
       })
-      .catch((err) => {
-        setMsg(err.message);
-        seLoading(false);
+      .then((data) => {
+        console.log(data);
+        if (data?.email) {
+          fetch(`http://localhost:5000/jwt?email=${data.email}`)
+            .then((result) => result.json())
+            .then((data2) => {
+              if (data2?.accessToken) {
+                setuser(data);
+                localStorage.setItem("dobby-token", data2.accessToken);
+                setLoading(false);
+                navigate("/");
+              }
+            });
+        }
       });
     setMsg(null);
   };
-  if (loading) {
-    return <Spinner></Spinner>;
-  }
+
   return (
     <div className="hero min-h-screen ">
       <div className="hero-content flex-col lg:flex-row-reverse">

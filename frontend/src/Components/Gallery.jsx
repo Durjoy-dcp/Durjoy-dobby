@@ -18,7 +18,7 @@ const Gallery = () => {
     queryKey: ["images"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/gallery?serachText=${serachText}&&email=${user?.email}`,
+        `http://localhost:5000/gallery?serachText=${serachText}`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem("dobby-token")}`,

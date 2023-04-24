@@ -5,13 +5,13 @@ import Spinner from "./Components/Spinner";
 import { AuthContext } from "./Context/AuthProvider";
 
 const Private = ({ children }) => {
-  const { user, loading } = useContext(AuthContext);
+  const { user, loading, setLoading } = useContext(AuthContext);
   const location = useLocation();
   const storeToken = localStorage.getItem("dobby-token") || null;
-  if (user && storeToken !== null) {
+  if (storeToken !== null) {
     return children;
   }
-  if (loading) {
+  if (loading && storeToken !== null) {
     return <Spinner></Spinner>;
   }
   return <Navigate to="/login" state={{ from: location }} replace></Navigate>;

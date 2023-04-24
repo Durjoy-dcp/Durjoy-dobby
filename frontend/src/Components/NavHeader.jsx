@@ -12,6 +12,7 @@ const NavHeader = () => {
       navigate("/");
     });
   };
+  const storeToken = localStorage.getItem("dobby-token") || null;
   return (
     <div>
       <div className="navbar bg-base-100 container mx-auto ">
@@ -22,7 +23,7 @@ const NavHeader = () => {
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
-            {user && user.uid ? (
+            {storeToken !== null ? (
               <div className="flex gap-7">
                 <Link to="/imageupload">Upload Image</Link>
                 <Link to="/gallery">Gallery</Link>

@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import authImg from "../assets/auth-animation.gif";
 const Singup = () => {
-  const { signup } = useContext(AuthContext);
+  const { signup, setuser, setLoading } = useContext(AuthContext);
   const [msg, setMsg] = useState(null);
   const navigate = useNavigate();
   const handleToSignUp = (e) => {
@@ -22,16 +22,33 @@ const Singup = () => {
       setMsg("Provide minimum 8 characters to set password");
       return;
     }
-    signup(email, password).then((res) => {
-      fetch(`http://localhost:5000/jwt?email=${res.user.email}`)
-        .then((result) => result.json())
-        .then((data) => {
-          if (data?.accessToken) {
-            localStorage.setItem("dobby-token", data.accessToken);
-            navigate("/");
-          }
-        });
-    });
+    signup(email, password)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 403) {
+          res.json().then((data) => {
+            setMsg(data.message);
+          });
+          return;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        if (data?.email) {
+          fetch(`http://localhost:5000/jwt?email=${data.email}`)
+            .then((result) => result.json())
+            .then((data2) => {
+              if (data2?.accessToken) {
+                setuser(data);
+                localStorage.setItem("dobby-token", data2.accessToken);
+                setLoading(false);
+                navigate("/");
+              }
+            });
+        }
+      });
+
     setMsg(null);
   };
   return (
