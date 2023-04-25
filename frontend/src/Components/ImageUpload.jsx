@@ -26,7 +26,7 @@ const ImageUpload = () => {
       .then((res) => res.json())
       .then((imageData) => {
         if (imageData.success) {
-          console.log(imageData);
+          // console.log(imageData);
           const imgInfo = {
             name,
             img: imageData.data.url,

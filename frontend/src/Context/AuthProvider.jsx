@@ -31,7 +31,39 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = () => {
+    const unsubscribe = async () => {
+      // check if a JWT is present in local storage
+      const authTokens = localStorage.getItem("dobby-token");
+      if (authTokens) {
+        // validate the JWT and set the user if it is valid
+        fetch("https://durjoy-dobby.vercel.app/validate", {
+          headers: {
+            Authorization: `Bearer ${authTokens}`,
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Invalid token");
+            }
+          })
+          .then((data) => {
+            setuser(data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            // console.error(error);
+            setLoading(false);
+          });
+      } else {
+        setLoading(false);
+      }
+    };
+    return () => unsubscribe();
+  }, [authToken]);
+  useEffect(() => {
+    const unsubscribe = async () => {
       // check if a JWT is present in local storage
       const authToken = localStorage.getItem("dobby-token");
       if (authToken) {
@@ -53,16 +85,16 @@ const AuthProvider = ({ children }) => {
             setLoading(false);
           })
           .catch((error) => {
-            console.error(error);
+            // console.error(error);
             setLoading(false);
           });
       } else {
         setLoading(false);
       }
     };
+    unsubscribe();
     return () => unsubscribe();
-  }, [authToken]);
-
+  }, []);
   const authInfo = {
     user,
     loading,

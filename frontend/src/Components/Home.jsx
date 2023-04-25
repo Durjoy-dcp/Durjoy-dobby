@@ -3,9 +3,11 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import img from "../assets/img-animation.gif";
 import { AuthContext } from "../Context/AuthProvider";
+import Spinner from "./Spinner";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
+
   return (
     <div>
       <div>

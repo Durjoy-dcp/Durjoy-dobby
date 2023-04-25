@@ -6,18 +6,20 @@ import authImg from "../assets/auth-animation.gif";
 const Login = () => {
   const { login, loading, setLoading, setuser, authToken, setAuthToken } =
     useContext(AuthContext);
+  const storeToken = localStorage.getItem("dobby-token") || null;
   const [msg, setMsg] = useState(null);
   const navigate = useNavigate();
   const handleToLogin = (e) => {
-    setLoading(true);
     e.preventDefault();
+    setMsg("Loading..");
+    setLoading(true);
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
 
     login(email, password)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === 403) {
           res.json().then((data) => {
             setLoading(false);
@@ -29,7 +31,7 @@ const Login = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data?.email) {
           fetch(`https://durjoy-dobby.vercel.app/jwt?email=${data.email}`)
             .then((result) => result.json())
@@ -47,9 +49,9 @@ const Login = () => {
       });
     setMsg(null);
   };
-  if (loading) {
-    return <Spinner></Spinner>;
-  }
+  // if (loading) {
+  //   return <Spinner></Spinner>;
+  // }
   return (
     <div className="hero min-h-screen ">
       <div className="hero-content flex-col lg:flex-row-reverse">

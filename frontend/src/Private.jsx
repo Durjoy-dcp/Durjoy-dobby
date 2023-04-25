@@ -8,10 +8,10 @@ const Private = ({ children }) => {
   const { user, loading, setLoading } = useContext(AuthContext);
   const location = useLocation();
   const storeToken = localStorage.getItem("dobby-token") || null;
-  if (storeToken !== null) {
+  if (user?.email) {
     return children;
   }
-  if (loading && storeToken !== null) {
+  if (loading) {
     return <Spinner></Spinner>;
   }
   return <Navigate to="/login" state={{ from: location }} replace></Navigate>;

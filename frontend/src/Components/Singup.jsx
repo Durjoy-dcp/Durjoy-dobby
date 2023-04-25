@@ -12,6 +12,8 @@ const Singup = () => {
   const navigate = useNavigate();
   const handleToSignUp = (e) => {
     e.preventDefault();
+    setMsg("Loading..");
+
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
@@ -26,7 +28,7 @@ const Singup = () => {
     }
     signup(email, password)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === 403) {
           res.json().then((data) => {
             setLoading(false);
@@ -37,7 +39,7 @@ const Singup = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data?.email) {
           fetch(`https://durjoy-dobby.vercel.app/jwt?email=${data.email}`)
             .then((result) => result.json())
@@ -56,9 +58,9 @@ const Singup = () => {
 
     setMsg(null);
   };
-  if (loading) {
-    return <Spinner></Spinner>;
-  }
+  // if (loading) {
+  //   return <Spinner></Spinner>;
+  // }
   return (
     <div className="hero min-h-screen ">
       <div className="hero-content flex-col lg:flex-row-reverse">

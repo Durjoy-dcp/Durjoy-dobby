@@ -11,7 +11,7 @@ const NavHeader = () => {
     localStorage.removeItem("dobby-token");
     navigate("/");
   };
-  const storeToken = localStorage.getItem("dobby-token") || null;
+
   return (
     <div>
       <div className="navbar bg-base-100 container mx-auto ">
