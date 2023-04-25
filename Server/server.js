@@ -27,7 +27,7 @@ function verifyJWT(req, res, next) {
 
   const token = authHeader.split(" ")[1];
   if (token === null) {
-    console.log("in token");
+    // console.log("in token");
     res.status(401).send("unauthorized access");
   }
 
@@ -80,7 +80,7 @@ async function run() {
     });
     app.post("/login", async (req, res) => {
       const info = req.body;
-      console.log(info);
+      // console.log(info);
       const user = await userCollection.findOne({ email: info.email });
       if (!user) {
         return res.status(403).send({ message: "Email not exist" });
