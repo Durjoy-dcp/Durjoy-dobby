@@ -18,7 +18,7 @@ const Gallery = () => {
     queryKey: ["images"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/gallery?serachText=${serachText}`,
+        `https://durjoy-dobby.vercel.app/gallery?serachText=${serachText}`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem("dobby-token")}`,

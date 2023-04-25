@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
   const signup = (email, password) => {
     setLoading(true);
     const info = { email, password };
-    return fetch("http://localhost:5000/createuser", {
+    return fetch("https://durjoy-dobby.vercel.app/createuser", {
       method: "POST",
       body: JSON.stringify(info),
       headers: {
@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
   const login = (email, password) => {
     setLoading(true);
     const info = { email, password };
-    return fetch("http://localhost:5000/login", {
+    return fetch("https://durjoy-dobby.vercel.app/login", {
       method: "POST",
       body: JSON.stringify(info),
       headers: {
@@ -36,7 +36,7 @@ const AuthProvider = ({ children }) => {
       const authToken = localStorage.getItem("dobby-token");
       if (authToken) {
         // validate the JWT and set the user if it is valid
-        fetch("http://localhost:5000/validate", {
+        fetch("https://durjoy-dobby.vercel.app/validate", {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

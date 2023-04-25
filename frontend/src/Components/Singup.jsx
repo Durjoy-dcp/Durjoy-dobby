@@ -39,7 +39,7 @@ const Singup = () => {
       .then((data) => {
         console.log(data);
         if (data?.email) {
-          fetch(`http://localhost:5000/jwt?email=${data.email}`)
+          fetch(`https://durjoy-dobby.vercel.app/jwt?email=${data.email}`)
             .then((result) => result.json())
             .then((data2) => {
               if (data2?.accessToken) {

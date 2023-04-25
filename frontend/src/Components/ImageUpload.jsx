@@ -32,7 +32,7 @@ const ImageUpload = () => {
             img: imageData.data.url,
           };
 
-          fetch(`http://localhost:5000/uploadimage`, {
+          fetch(`https://durjoy-dobby.vercel.app/uploadimage`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

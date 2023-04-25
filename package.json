@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "start": "nodemon Server/server.js"
+    "start": "node Server/server.js",
+    "build": "node Server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
